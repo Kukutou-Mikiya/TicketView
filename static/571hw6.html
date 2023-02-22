@@ -1,0 +1,109 @@
+<html>
+<head>
+  <script type="module" src="../static/app.js"></script>
+  <link rel="stylesheet" type="text/css" href="../static/css/main.css">
+
+</head>
+<body>  
+  <form class="frosted-glass">
+    <h2>Events Search</h1>
+    <label for="keyword">Keyword</label>
+    <br>
+    <input type="text" id="keyword" placeholder="Keyword" required>
+    <br>
+    <div id="distance-category-container">
+      <label for="distance">Distance(miles)</label>
+      <input type="number" id="distance" placeholder="10">
+      <label for="category">Category</label>
+      <select id="category" required>
+        <option value="default">Default</option>
+        <option value="music">Music</option>
+        <option value="sports">Sports</option>
+        <option value="arts">Arts</option>
+        <option value="theatre">Theatre</option>
+        <option value="film">Film</option>
+        <option value="misc">Miscellaneous</option>
+      </select>
+    </div>
+
+      <label id="location_label" for="location">Location</label><input type="checkbox" id="auto-detect"  onchange="toggleLocation()"><label for="auto-detect">Auto-detect location</label>
+    <div id="location-container">
+      <input type="text" name="location" id="location" placeholder="" required>
+    </div>
+
+    <br>
+    <input type="submit" id="search" value="SEARCH" onclick="">
+    <input type="button" id="clear" value="CLEAR" onclick="">
+  </form>
+
+  <table id="eventTable">
+		<thead id="tableHead" hidden>
+			<tr>
+				<!-- <th id='s0' onclick="sortTable(0)">Date</th>
+				<th>Icon</th>
+				<th id='s2' onclick="sortTable(2)">Event Name</th>
+				<th id='s3' onclick="sortTable(3)">Genre</th>
+				<th id='s4' onclick="sortTable(4)">Venue Name</th>-->
+        <th id='s0' onclick="">Date</th>
+				<th>Icon</th>
+				<th id='s2' onclick="">Event Name</th>
+				<th id='s3' onclick="">Genre</th>
+				<th id='s4' onclick="">Venue Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- use JavaScript to populate table rows -->
+		</tbody>
+	</table>
+  <div id="noResults" style="display: none">No records found.</div>
+
+<div id="eventCard" class="card frosted-glass">
+  <h2 id="cardEventName"></h2>
+	<div class="card-info">   
+    <div class="card-left">
+      <p><span id="cardDate"></span></p>
+      <p><span id="cardArtist"></span></p>
+      <p><span id="cardVenue"></span></p>
+      <p><span id="cardGenres"></span></p>
+      <p><span id="cardPriceRanges"></span></p>
+      <p><span id="cardTicketStatus"></span></p>
+      <p><span id="cardBuyTickets"></span></p>
+    </div>
+		<div class="card-right">
+			<img id="cardSeatMap" src="" alt="Seat Map">
+		</div>
+	</div>
+</div>
+<div id="venueDetails" class="venue-details">
+  <div id="venueToggle" class="venue-toggle" onclick="">
+    Show Venue Details <br> &#8964;
+  </div>
+</div>
+<script>
+
+</script>
+<script>
+        function toggleLocation() {
+          var locationContainer = document.getElementById("location-container");
+          if (document.getElementById("auto-detect").checked) {
+            locationContainer.style.display = "none";
+          } else {
+            locationContainer.style.display = "block";
+          }
+        }
+    
+        toggleLocation(); // initialize location display
+      </script>
+    </body>
+<script type="module">
+    import { search, clearForm, sortTable } from '../static/app.js';
+    document.querySelector('#search').addEventListener('click', search);
+    document.querySelector('#clear').addEventListener('click', clearForm);
+    document.querySelector('#s0').addEventListener('click', ()=>{sortTable(0);});
+    document.querySelector('#s2').addEventListener('click', ()=>{sortTable(2);});
+    document.querySelector('#s3').addEventListener('click', ()=>{sortTable(3);});
+    document.querySelector('#s4').addEventListener('click', ()=>{sortTable(4);});
+</script>
+</script>
+</body>
+</html>
