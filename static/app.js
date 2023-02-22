@@ -1,6 +1,6 @@
 import Geohash from './latlon-geohash.js';
     // Fetch user's geolocation using ipinfo.io API
-
+import { GapiKey, apiKey } from './apikey.js';
 // declare global variables
 let eventsData; // array of events data returned by Ticketmaster Event Search API
 let sortedColumn = -1; // index of column to sort table by
@@ -25,7 +25,6 @@ export async function fetchLocation() {
 export const getLatLngFromAddress = (address) => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    const GapiKey = 'AIzaSyB0kiyzsTHfKLz7Ige_QsG9ZoidKkMMQf4';
     xhr.open('GET', `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GapiKey}`);
     xhr.onreadystatechange = function() {
       if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -235,7 +234,6 @@ const displayEventCard = (eventId,venueName) => {
   let venueData = false;
 
   // make API call to Ticketmaster Event Details API
-  const apiKey = '94UcyU0cGrWAaWAD6zABpFsfJKNi6znX';
   const eventUrl = `https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=${apiKey}`;
   console.log(eventUrl)
   fetch(eventUrl)
