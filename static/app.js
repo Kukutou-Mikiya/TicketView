@@ -59,9 +59,6 @@ export async function search(e) {
     location = await fetchLocation();
   } else {
     location = await getLatLngFromAddress(document.getElementById("location").value);
-    console.log(document.getElementById("location").value);
-    console.log('Google loc:')
-    console.log(location)
   }
 
   // Set default values for distance and category if not provided
@@ -282,8 +279,6 @@ const displayEventCard = (eventId,venueName) => {
   // display detailed event card once all API data is returned
   const displayCardInfo = () => {
     // populate event card with API data
-    const cardEventName = document.querySelector('#cardEventName');
-    cardEventName.style.display = 'block';
     if (eventData.name) {
       cardEventName.innerHTML = `${eventData.name}`;
     } else {
@@ -396,9 +391,11 @@ const displayEventCard = (eventId,venueName) => {
 
     if(venueData._embedded){
       setVenueCard(venueData);
-      document.querySelector('#venueToggle').style.display = 'block';
+      document.getElementById('venueToggle').style.display = 'block';
+      document.getElementById('venueDetailsCard').style.display = 'none';
     } else {
-      document.querySelector('#venueToggle').style.display = 'none';
+      document.querySelector('venueDetails').style.display = 'none';
+      console.log(venueData);
     }  
   }
 };
@@ -406,53 +403,47 @@ const displayEventCard = (eventId,venueName) => {
 
 
 const setVenueCard = (venueData) => {
+  console.log(venueData._embedded.venues[0].images)
   // declare variables for venue data
-  let venueName, venueAddress, venueCity, venueState, venuePostalCode, venueLocation;
+  let venueName, venueAddress, venueCity, venueState, venuePostalCode, venueLocation, venueImage;
 
   // check if venue data is available
   if (venueData && venueData._embedded && venueData._embedded.venues && venueData._embedded.venues.length > 0) {
     const venue = venueData._embedded.venues[0];
 
-  // set variables for venue data
-  venueName = venue.name || 'N/A';
-  venueAddress = venue.address?.line1 || 'N/A';
-  venueCity = venue.city?.name || 'N/A';
-  venueState = venue.state?.name || 'N/A';
-  venuePostalCode = venue.postalCode || 'N/A';
-  venueLocation = `${venueAddress}, ${venueCity}, ${venueState}, ${venuePostalCode}`;
+    // set variables for venue data
+    venueName = venue.name || 'N/A';
+    venueAddress = venue.address?.line1 || 'N/A';
+    venueCity = venue.city?.name || 'N/A';
+    venueState = venue.state?.name || 'N/A';
+    venuePostalCode = venue.postalCode || 'N/A';
+    venueLocation = `${venueAddress}, ${venueCity}, ${venueState}, ${venuePostalCode}`;
+    venueImage = venue.images && venue.images.length > 0 ? venue.images[0].url : '';
   }
 
-  // create Venue Details card HTML elements
-  const venueDetailsCard = document.createElement('div');
-  venueDetailsCard.classList.add('venue-card');
+  // get the Venue Details card HTML elements
+  const venueDetailsCard = document.getElementById('venueDetailsCard');
+  const venueDetailsTitle = document.getElementById('venueDetailsTitle');
+  const venueImageElement = document.getElementById('venueImage');
+  const venueDetailsWrapper = document.getElementById('venueDetailsWrapper');
+  const venueDetailsLocation = document.getElementById('venueAddress');
+  const venueDetailsEvents = document.getElementById('venueEventsLink');
 
-  const venueDetailsTitle = document.createElement('h2');
-  venueDetailsTitle.classList.add('venue-details-title');
-  venueDetailsTitle.innerHTML = `${venueName}`
-
-  const venueDetailsWrapper = document.createElement('div');
-  venueDetailsWrapper.classList.add('venue-details-wrapper');
-
-  const venueDetailsLocation = document.createElement('div');
-  venueDetailsLocation.classList.add('left-col');
+  // update Venue Details card with venue data
+  venueDetailsTitle.innerHTML = `${venueName}`;
+  if(venueImage){
+    venueImageElement.src = venueImage;
+  }
+  else {
+    venueImageElement.style.display = 'none';
+  }
   venueDetailsLocation.innerHTML = `
     <p>Address: ${venueAddress}<br>${venueCity}, ${venueState}<br>${venuePostalCode}</p>
     <p><a href="https://www.google.com/maps/search/?api=1&query=${encodeURI(venueLocation)}" style="text-decoration:none; color: rgb(0, 191, 255);" target="_blank">Open in Google Maps</a></p>
   `;
-
-  const venueDetailsEvents = document.createElement('div');
-  venueDetailsEvents.classList.add('right-col');
   venueDetailsEvents.innerHTML = `
     <p><a href="https://www.ticketmaster.com/search?q=${encodeURI(venueName)}" style="text-decoration:none; color: rgb(0, 191, 255);" target="_blank">More events at this venue</a></p>
   `;
-
-  // add Venue Details card to DOM
-  venueDetailsWrapper.appendChild(venueDetailsLocation);
-  venueDetailsWrapper.appendChild(venueDetailsEvents);
-  venueDetailsCard.appendChild(venueDetailsTitle);
-  venueDetailsCard.appendChild(venueDetailsWrapper);
-  document.querySelector('#venueDetails').appendChild(venueDetailsCard);
-
   // hide the Venue Details card initially
   venueDetailsCard.style.display = 'none';
 
@@ -464,8 +455,6 @@ const setVenueCard = (venueData) => {
       venueToggle.style.display = 'none';
     } else {
       venueDetailsWrapper.style.display = 'none';
-      venueDetailsTitle.querySelector('.venue-details-title-arrow').innerHTML = '&#9660;';
     }
   });
-
 };
