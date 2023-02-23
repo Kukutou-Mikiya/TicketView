@@ -11,7 +11,6 @@ export async function fetchLocation() {
   if (response.ok) {
       const data = await response.json();
       const location = data.loc.split(',');
-      console.log(location)
       return {
             latitude: location[0],
             longitude: location[1]
@@ -23,34 +22,34 @@ export async function fetchLocation() {
   }
 
 export const getLatLngFromAddress = (address) => {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GapiKey}`);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          if (response.status === 'OK') {
-            const location = response.results[0].geometry.location;
-            resolve({
-              latitude: location.lat,
-              longitude: location.lng
-            });
-          } else {
-            reject('Failed to retrieve location from address');
-          }
-        } else {
-          reject('Failed to retrieve location from address');
-        }
+  return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GapiKey}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to retrieve location from address');
       }
-    };
-    xhr.send();
-  });
+      return response.json();
+    })
+    .then(data => {
+      if (data.status === 'OK') {
+        const location = data.results[0].geometry.location;
+        return {
+          latitude: location.lat,
+          longitude: location.lng
+        };
+      } else {
+        throw new Error('Failed to retrieve location from address');
+      }
+    });
 };
 
   // Search events using form inputs
-export async function search() {
-  
+export async function search(e) {
+  e.preventDefault();
+  var form = e.target.form;
+  if (form.reportValidity()==false){
+    return
+  }
+  console.log('search is running')
   const keyword = document.getElementById("keyword").value;
   let distance = document.getElementById("distance").value;
   let category = document.getElementById("category").value;
@@ -60,6 +59,9 @@ export async function search() {
     location = await fetchLocation();
   } else {
     location = await getLatLngFromAddress(document.getElementById("location").value);
+    console.log(document.getElementById("location").value);
+    console.log('Google loc:')
+    console.log(location)
   }
 
   // Set default values for distance and category if not provided
@@ -76,8 +78,15 @@ export async function search() {
   const url = `http://127.0.0.1:5000/events?keyword=${keyword}&distance=${distance}&category=${category}&geoPoint=${geoPoint}`;
   const response = await fetch(url);
   eventsData = await response.json();
-  eventsData = eventsData._embedded.events;
-  displayEvents();
+  if (eventsData._embedded){
+      eventsData = eventsData._embedded.events;
+      displayEvents();
+      document.getElementById("noResults").style.display = 'none';
+  }
+  else {
+      document.getElementById("noResults").style.display = 'block';
+  }
+  return false;
   // Display the results in the result area
 
 }
@@ -97,6 +106,8 @@ export function clearForm() {
   tableHead.hidden = true;
   document.querySelector('#eventCard').style.display = 'none';
   document.querySelector('#venueDetails').style.display = 'none';
+  document.getElementById("location-container").style.display = 'block';
+  document.getElementById("location").setAttribute("required", "");
 }
 
 
@@ -179,7 +190,6 @@ const displayEvents = () => {
 
 // handle sorting on table headers
 export const sortTable = (columnIndex) => {
-  console.log(columnIndex)
   // set sortedColumn to columnIndex if it's not already sorted by that column, or reverse the sort order if it is
   if (columnIndex !== sortedColumn) {
     sortedColumn = columnIndex;
@@ -235,7 +245,6 @@ const displayEventCard = (eventId,venueName) => {
 
   // make API call to Ticketmaster Event Details API
   const eventUrl = `https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=${apiKey}`;
-  console.log(eventUrl)
   fetch(eventUrl)
     .then(response => {
       if (response.ok) {
@@ -290,7 +299,6 @@ const displayEventCard = (eventId,venueName) => {
     }
 
     const cardArtist = document.querySelector('#cardArtist');
-    console.log(eventData._embedded)
     cardArtist.style.display = 'block';
     if (eventData._embedded.attractions && eventData._embedded.attractions.length > 0) {
       cardArtist.innerHTML = `<strong class="lime-text-size-14">Artist/Team</strong><br>${eventData._embedded.attractions.map(attraction => `<a href="${attraction.url}" style="text-decoration:none">${attraction.name}</a>`).join(' | ')}`;
@@ -388,6 +396,7 @@ const displayEventCard = (eventId,venueName) => {
 
     if(venueData._embedded){
       setVenueCard(venueData);
+      document.querySelector('#venueToggle').style.display = 'block';
     } else {
       document.querySelector('#venueToggle').style.display = 'none';
     }  

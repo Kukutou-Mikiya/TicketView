@@ -2,10 +2,10 @@ from flask import Flask, request, jsonify
 import flask
 import requests
 
-app = Flask(__name__, template_folder='templates',static_url_path='/static')
+app = Flask(__name__,static_url_path='/static')
 app.debug = True
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def home():
    return app.send_static_file('571hw6.html')
 
@@ -25,7 +25,7 @@ def events():
         "sports": "KZFzniwnSyZfZ7v7nE",
         "arts": "KZFzniwnSyZfZ7v7na",
         "film": "KZFzniwnSyZfZ7v7nn",
-        "miscellaneous": "KZFzniwnSyZfZ7v7n1",
+        "misc": "KZFzniwnSyZfZ7v7n1",
         "default": ""
     }
     segmentId = category_to_segmentId.get(category, "")

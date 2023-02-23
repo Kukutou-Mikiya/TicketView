@@ -1,15 +1,17 @@
+
 <html>
 <head>
   <script type="module" src="../static/app.js"></script>
   <link rel="stylesheet" type="text/css" href="../static/css/main.css">
 
 </head>
-<body>  
+<body>
+  
   <form class="frosted-glass">
     <h2>Events Search</h1>
     <label for="keyword">Keyword</label>
     <br>
-    <input type="text" id="keyword" placeholder="Keyword" required>
+    <input type="text" id="keyword" required>
     <br>
     <div id="distance-category-container">
       <label for="distance">Distance(miles)</label>
@@ -19,23 +21,21 @@
         <option value="default">Default</option>
         <option value="music">Music</option>
         <option value="sports">Sports</option>
-        <option value="arts">Arts</option>
-        <option value="theatre">Theatre</option>
+        <option value="arts">Arts & Theatre</option>
         <option value="film">Film</option>
         <option value="misc">Miscellaneous</option>
       </select>
     </div>
-
-      <label id="location_label" for="location">Location</label><input type="checkbox" id="auto-detect"  onchange="toggleLocation()"><label for="auto-detect">Auto-detect location</label>
+    <label id="location_label" for="location">Location</label>
+    <input type="checkbox" id="auto-detect"  onchange="toggleLocation()">
+    <label for="auto-detect">Auto-detect location</label>
     <div id="location-container">
-      <input type="text" name="location" id="location" placeholder="" required>
+    <input type="text" name="location" id="location" required>
     </div>
-
     <br>
-    <input type="submit" id="search" value="SEARCH" onclick="">
+    <input type="submit" id="search_btn" value="SEARCH"></input>
     <input type="button" id="clear" value="CLEAR" onclick="">
   </form>
-
   <table id="eventTable">
 		<thead id="tableHead" hidden>
 			<tr>
@@ -79,31 +79,41 @@
     Show Venue Details <br> &#8964;
   </div>
 </div>
-<script>
 
-</script>
 <script>
-        function toggleLocation() {
-          var locationContainer = document.getElementById("location-container");
-          if (document.getElementById("auto-detect").checked) {
-            locationContainer.style.display = "none";
-          } else {
-            locationContainer.style.display = "block";
-          }
-        }
-    
-        toggleLocation(); // initialize location display
-      </script>
-    </body>
-<script type="module">
-    import { search, clearForm, sortTable } from '../static/app.js';
-    document.querySelector('#search').addEventListener('click', search);
-    document.querySelector('#clear').addEventListener('click', clearForm);
-    document.querySelector('#s0').addEventListener('click', ()=>{sortTable(0);});
-    document.querySelector('#s2').addEventListener('click', ()=>{sortTable(2);});
-    document.querySelector('#s3').addEventListener('click', ()=>{sortTable(3);});
-    document.querySelector('#s4').addEventListener('click', ()=>{sortTable(4);});
+  //document.querySelector('#search').addEventListener('submit', function(event) {
+  //  return false; // prevent the form from submitting
+  //});
+  document.getElementById("venueToggle").style.display = 'none';
+  function toggleLocation() {
+    var locationContainer = document.getElementById("location-container");
+    if (document.getElementById("auto-detect").checked) {
+      locationContainer.style.display = "none";      
+      document.getElementById("location").removeAttribute("required");
+    } else {
+      locationContainer.style.display = "block";
+      document.getElementById("location").setAttribute("required", "");
+    }
+  }
+
+  toggleLocation(); // initialize location display
 </script>
+<script type="module">
+
+  import { search, clearForm, sortTable } from '../static/app.js';
+  function onSearch(event) {
+    console.log('runned')
+    event.preventDefault();
+    search();
+    return false;
+  } 
+  document.getElementById("search_btn").addEventListener('click', (event) =>{return search(event)});
+  document.querySelector('#clear').addEventListener('click', clearForm);
+  document.querySelector('#s0').addEventListener('click', ()=>{sortTable(0);});
+  document.querySelector('#s2').addEventListener('click', ()=>{sortTable(2);});
+  document.querySelector('#s3').addEventListener('click', ()=>{sortTable(3);});
+  document.querySelector('#s4').addEventListener('click', ()=>{sortTable(4);});
 </script>
 </body>
+
 </html>

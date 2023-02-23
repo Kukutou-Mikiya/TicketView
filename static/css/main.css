@@ -104,6 +104,13 @@ table {
   thead {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4);
   }
+
+  .noResults {
+    width: 60%;
+    background-color: white;
+    color: red;
+  }
+
 .card {
     margin-top: 20px;
     padding: 10px;
