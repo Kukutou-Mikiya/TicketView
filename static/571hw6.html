@@ -8,7 +8,7 @@
 <body>
   
   <form class="frosted-glass">
-    <h2>Events Search</h1>
+    <h2 class="searchHeader">Events Search</h1>
     <label for="keyword">Keyword</label>
     <br>
     <input type="text" id="keyword" required>
@@ -55,7 +55,7 @@
 			<!-- use JavaScript to populate table rows -->
 		</tbody>
 	</table>
-  <div id="noResults" style="display: none">No records found.</div>
+  <div id="noResults" class='no-results' style="display: none">No records found.</div>
 
 <div id="eventCard" class="card frosted-glass">
   <h2 id="cardEventName"></h2>
@@ -80,7 +80,7 @@
   </div>
   <div class="venue-card" id="venueDetailsCard">
     <h2 class="venue-details-title" id="venueDetailsTitle"></h2>
-    <img src="" alt="Venue Image" id="venueImage">
+    <img src="" alt="Venue Image" id="venueImage" class="venue-image">
     <div class="venue-details-wrapper">
       <div class="left-col">
         <p id="venueAddress"></p>

@@ -15,6 +15,10 @@ flex-direction: column;
 align-items: center;
 }
 
+.searchHeader{
+  border-bottom: 1px solid white;
+}
+
 form {
     padding: 20px;
     border-radius: 1px;
@@ -41,7 +45,7 @@ input[type="checkbox"] {
 
 input[type="submit"],
 input[type="button"] {
-    width: 48%;
+    width: 20%;
     padding: 10px;
     border: none;
     border-radius: 5px;
@@ -55,6 +59,14 @@ input[type="submit"] {
 
 input[type="button"] {
     background-color: rgb(32, 69, 164);
+}
+
+input[type="submit"]:hover {
+  background-color: rgb(255, 138, 40);
+}
+
+input[type="button"]:hover {
+  background-color: rgb(64, 107, 200); /* lighter color */
 }
 
 h2 {
@@ -74,12 +86,16 @@ label[for="distance"], label[for="category"], label[for="keyword"], label[for="l
     color: rgb(19, 108, 135);
 }
 
-
+#category {
+  color: black;
+}
 
 
 table {
     border-collapse: collapse;
     width: 80%;
+    margin: 0 auto;
+    padding: 0 100 0 100;
   }
   
   td, th {
@@ -105,10 +121,11 @@ table {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4);
   }
 
-  .noResults {
+  .no-results {
     width: 60%;
     background-color: white;
     color: red;
+    text-align: center;
   }
 
 .card {
@@ -152,7 +169,7 @@ background-color: red;
 color: white;
 }
 
-.canceled {
+.cancelled {
 background-color: black;
 color: white;
 }
@@ -175,6 +192,12 @@ background-color: transparent;
 color: white;
 }
 
+#venueToggle:hover {
+  color: gray;
+}
+.venue-details{
+  width: 45%;
+}
 .venue-card {
     display: none;
     position: relative;
@@ -189,8 +212,13 @@ color: white;
 margin-top: 0;
 margin-bottom: 10px;
 color: black;
+text-decoration: underline;
 }
 
+.venue-image {
+  display: block;
+  margin: 0 auto;
+}
 
 .venue-details-wrapper {
     display: flex;
