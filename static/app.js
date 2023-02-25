@@ -304,7 +304,7 @@ const displayEventCard = (eventId,venueName) => {
     const cardBuyTickets = document.querySelector('#cardBuyTickets');
     const cardSeatMap = document.querySelector('#cardSeatMap');
 
-
+    cardEventName.style.display = 'block';
     if (eventData.name) {
       cardEventName.innerHTML = `${eventData.name}`;
     } else {
@@ -417,6 +417,7 @@ const displayEventCard = (eventId,venueName) => {
 
     if(venueData._embedded){
       setVenueCard(venueData);
+      document.getElementById('venueDetails').style.display = 'block';
       document.getElementById('venueToggle').style.display = 'block';
       document.getElementById('venueDetailsCard').style.display = 'none';
     } else {
@@ -457,6 +458,7 @@ const setVenueCard = (venueData) => {
   // update Venue Details card with venue data
   venueDetailsTitle.innerHTML = `${venueName}`;
   if(venueImage){
+    venueImageElement.style.display = 'block';
     venueImageElement.src = venueImage;
     venueImageElement.width = 240;
     venueImageElement.height = 135;
